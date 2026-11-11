@@ -31,7 +31,7 @@
       margin: 20px 0;
     }
 
-    /* صورتك الشخصية المظبوطة بدقة */
+    /* صورتك الشخصية الحقيقية */
     .image-box {
       width: 100%;
       height: 220px;
@@ -87,7 +87,7 @@
       height: 32px;
     }
 
-    /* الشات بوكس */
+    /* الشات بوكس السحابي */
     .chat-section {
       background: rgba(20, 15, 15, 0.95);
       border: 1px solid #ff4d4d;
@@ -129,7 +129,7 @@
     }
     .send-btn:hover { background: #b30000; }
 
-    /* صندوق التعليقات مثل يوتيوب */
+    /* صندوق التعليقات السحابية */
     .comments-list {
       margin-top: 15px;
       max-height: 150px;
@@ -159,7 +159,7 @@
 
   <div class="card-container">
     
-    <!-- صورتك الحقيقية التي أرسلتها بالأعلى -->
+    <!-- صورتك الشخصية الحقيقية بالأعلى -->
     <div class="image-box">
       <img src="https://i.ibb.co/N22KC2zz/Chat-GPT-Image-23-2026-01-54-43-2.png" alt="Fares Image">
     </div>
@@ -182,19 +182,23 @@
       </audio>
     </div>
 
-    <!-- الشات بوكس -->
+    <!-- الشات بوكس السحابي -->
     <div class="chat-section">
       <h5>اكتبي الي انتي عايزها</h5>
       <textarea id="replyMsg" class="chat-textarea" placeholder="اكتبي رسالتك هنا..."></textarea>
       <button class="send-btn" onclick="postComment()">إرسال الرسالة</button>
       
-      <!-- قائمة التعليقات -->
+      <!-- قائمة التعليقات السحابية -->
       <div id="commentsContainer" class="comments-list"></div>
     </div>
 
   </div>
 
   <script>
+    // بيانات السحابة (JSONBin)
+    const BIN_ID = "6af4f08fac6210605a80d792";
+    const API_KEY = "$2a$10$Ftg9K8ikxnYLE3//x0ynTOCrnJKlrKkprb6Qg.aeLYaZaRy8W.xFu";
+
     // تأثير الورود المتساقطة
     const bg = document.getElementById('fallingBg');
     for (let i = 0; i < 20; i++) {
@@ -209,40 +213,73 @@
       bg.appendChild(p);
     }
 
+    // تحميل التعليقات من السحابة تلقائياً عند فتح الصفحة
     window.onload = function() {
-      loadComments();
+      loadCommentsFromServer();
     };
 
-    function postComment() {
+    async function postComment() {
       const text = document.getElementById('replyMsg').value.trim();
-      if(text !== "") {
-        let comments = JSON.parse(localStorage.getItem('youtubeComments') || '[]');
-        comments.unshift({text: text, time: new Date().toLocaleString()});
-        localStorage.setItem('youtubeComments', JSON.stringify(comments));
-        
-        document.getElementById('replyMsg').value = '';
-        loadComments();
-      } else {
+      if(text === "") {
         alert("من فضلك اكتبِ رسالة أولاً!");
-      }
-    }
-
-    function loadComments() {
-      let comments = JSON.parse(localStorage.getItem('youtubeComments') || '[]');
-      let container = document.getElementById('commentsContainer');
-      container.innerHTML = "";
-      
-      if(comments.length === 0) {
-        container.innerHTML = '<div style="color: #777; text-align: center; font-size: 0.85rem; padding: 5px;">لا توجد رسائل بعد..</div>';
         return;
       }
 
-      comments.forEach(c => {
-        let item = document.createElement('div');
-        item.className = 'comment-item';
-        item.innerHTML = `<div>${c.text}</div><div class="comment-time">${c.time}</div>`;
-        container.appendChild(item);
-      });
+      try {
+        // 1. جلب الرسائل الحالية من السيرفر
+        let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+          headers: { "X-Master-Key": API_KEY }
+        });
+        let data = await res.json();
+        let comments = data.record || [];
+
+        // 2. إضافة الرسالة الجديدة في البداية
+        comments.unshift({ text: text, time: new Date().toLocaleString('ar-EG') });
+
+        // 3. حفظ القائمة المحدثة على السيرفر
+        await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': API_KEY
+          },
+          body: JSON.stringify(comments)
+        });
+
+        document.getElementById('replyMsg').value = '';
+        loadCommentsFromServer();
+        alert("تم إرسال رسالتك وسيراتها من أي جهاز بنجاح!");
+      } catch (err) {
+        alert("حدث خطأ أثناء الإرسال، تأكد من الاتصال بالإنترنت!");
+      }
+    }
+
+    async function loadCommentsFromServer() {
+      let container = document.getElementById('commentsContainer');
+      container.innerHTML = '<div style="color: #aaa; text-align: center; font-size: 0.85rem;">جاري تحميل الرسائل...</div>';
+
+      try {
+        let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+          headers: { "X-Master-Key": API_KEY }
+        });
+        let data = await res.json();
+        let comments = data.record || [];
+
+        container.innerHTML = "";
+        if(comments.length === 0) {
+          container.innerHTML = '<div style="color: #777; text-align: center; font-size: 0.85rem; padding: 5px;">لا توجد رسائل بعد..</div>';
+          return;
+        }
+
+        comments.forEach(c => {
+          let item = document.createElement('div');
+          item.className = 'comment-item';
+          item.innerHTML = `<div>${c.text}</div><div class="comment-time">${c.time}</div>`;
+          container.appendChild(item);
+        });
+      } catch (err) {
+        container.innerHTML = '<div style="color: #ff4d4d; text-align: center; font-size: 0.85rem;">فشل تحميل الرسائل.</div>';
+      }
     }
   </script>
 </body>
