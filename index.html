@@ -20,13 +20,40 @@
 
     .container { position: relative; z-index: 10; width: 90%; max-width: 420px; background: rgba(15, 15, 15, 0.95); border: 2px solid rgba(139, 0, 0, 0.6); border-radius: 20px; padding: 35px 25px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9); text-align: center; }
 
-    /* صورة السحابة العلوية المطابقة تماماً */
-    .top-cloud-img {
-      width: 120px;
-      height: auto;
-      margin: 0 auto 12px auto;
-      display: block;
-      filter: drop-shadow(0 0 12px rgba(255, 0, 0, 0.6));
+    /* سحابة الأكاتسوكي الأصلية المرسومة بدقة مطابقة للصورة تماماً */
+    .akatsuki-exact-cloud {
+      width: 110px;
+      height: 55px;
+      background-color: #8b0000;
+      border: 3.5px solid #ffffff;
+      border-radius: 50px;
+      margin: 0 auto 15px auto;
+      position: relative;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+    }
+    .akatsuki-exact-cloud::before {
+      content: '';
+      position: absolute;
+      background-color: #8b0000;
+      border-radius: 50%;
+      width: 55px;
+      height: 55px;
+      top: -26px;
+      left: 14px;
+      border-top: 3.5px solid #ffffff;
+      border-left: 3.5px solid #ffffff;
+    }
+    .akatsuki-exact-cloud::after {
+      content: '';
+      position: absolute;
+      background-color: #8b0000;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      top: -16px;
+      right: 18px;
+      border-top: 3.5px solid #ffffff;
+      border-right: 3.5px solid #ffffff;
     }
 
     .brand-title { font-size: 2rem; font-weight: bold; color: #ff4d4d; margin-bottom: 5px; text-shadow: 0 0 12px rgba(255, 77, 77, 0.5); }
@@ -50,8 +77,8 @@
 
   <div class="container">
     <div id="lockScreen">
-      <!-- استخدام رابط السحابة النقي المباشر -->
-      <img src="https://i.ibb.co/3ykz33p/akatsuki.png" alt="Akatsuki Cloud" class="top-cloud-img" onerror="this.src='https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=200&auto=format&fit=crop'">
+      <!-- السحابة المرسومة بدقة متناهية مطابقة للصورة -->
+      <div class="akatsuki-exact-cloud"></div>
       
       <div class="brand-title">الفلاح</div>
       <div class="sub-heading">رمز الاعتذار</div>
