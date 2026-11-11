@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>رسالة من الفلاح</title>
+  <title>رمز الاعتذار - الفلاح</title>
   <style>
     * {
       box-sizing: border-box;
@@ -23,7 +23,7 @@
       position: relative;
     }
 
-    /* سحابات أكاتسوكي الحمراء المتحركة في الخلفية */
+    /* خلفية سحابات أكاتسوكي المتحركة */
     .akatsuki-bg {
       position: fixed;
       top: 0;
@@ -37,14 +37,14 @@
 
     .cloud {
       position: absolute;
-      width: 130px;
-      height: 65px;
+      width: 140px;
+      height: 70px;
       background-color: #8b0000;
       border: 3px solid #ffffff;
       border-radius: 50px;
-      opacity: 0.8;
+      opacity: 0.85;
       box-shadow: 0 0 20px rgba(139, 0, 0, 0.7);
-      animation: floatClouds 15s linear infinite;
+      animation: floatClouds 16s linear infinite;
     }
 
     .cloud::before, .cloud::after {
@@ -55,38 +55,39 @@
     }
 
     .cloud::before {
-      width: 60px;
-      height: 60px;
-      top: -28px;
-      left: 18px;
+      width: 65px;
+      height: 65px;
+      top: -30px;
+      left: 20px;
       border-top: 3px solid #ffffff;
       border-left: 3px solid #ffffff;
     }
 
     .cloud::after {
-      width: 40px;
-      height: 40px;
-      top: -18px;
-      right: 22px;
+      width: 45px;
+      height: 45px;
+      top: -20px;
+      right: 25px;
       border-top: 3px solid #ffffff;
       border-right: 3px solid #ffffff;
     }
 
-    .cloud:nth-child(1) { top: 15%; left: -160px; animation-duration: 20s; transform: scale(0.9); }
-    .cloud:nth-child(2) { top: 50%; left: -160px; animation-duration: 14s; animation-delay: 3s; transform: scale(1.1); }
-    .cloud:nth-child(3) { top: 80%; left: -160px; animation-duration: 22s; animation-delay: 1s; transform: scale(0.8); }
+    .cloud:nth-child(1) { top: 15%; left: -180px; animation-duration: 20s; transform: scale(0.9); }
+    .cloud:nth-child(2) { top: 50%; left: -180px; animation-duration: 14s; animation-delay: 3s; transform: scale(1.1); }
+    .cloud:nth-child(3) { top: 80%; left: -180px; animation-duration: 22s; animation-delay: 1s; transform: scale(0.8); }
 
     @keyframes floatClouds {
       0% { left: -180px; }
       100% { left: 105vw; }
     }
 
+    /* صندوق الواجهة الرئيسية */
     .container {
       position: relative;
       z-index: 10;
       width: 90%;
       max-width: 420px;
-      background: rgba(15, 15, 15, 0.9);
+      background: rgba(15, 15, 15, 0.92);
       border: 2px solid rgba(139, 0, 0, 0.6);
       border-radius: 20px;
       padding: 35px 25px;
@@ -95,56 +96,28 @@
       text-align: center;
     }
 
-    /* --- السحابة العلوية الثابتة (التصميم الجديد) --- */
-    .top-akatsuki-cloud {
-      width: 100px; /* Adjust size as needed */
-      height: 60px; /* Adjust size as needed */
-      background-color: #8b0000; /* Red color from your image */
-      border: 3px solid #ffffff; /* White border from your image */
-      border-radius: 50px;
-      margin: 0 auto 15px auto;
-      position: relative;
-      box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    /* سحابة أكاتسوكي الحقيقية بالأعلى */
+    .top-cloud-img {
+      width: 110px;
+      height: auto;
+      margin: 0 auto 12px auto;
+      display: block;
+      filter: drop-shadow(0 0 12px rgba(255, 0, 0, 0.6));
     }
-
-    .top-akatsuki-cloud::before, .top-akatsuki-cloud::after {
-      content: '';
-      position: absolute;
-      background-color: #8b0000;
-      border-radius: 50%;
-    }
-
-    .top-akatsuki-cloud::before {
-      width: 50px; /* Adjust scale relative to width */
-      height: 50px;
-      top: -20px;
-      left: 20px;
-      border-top: 3px solid #fff;
-      border-left: 3px solid #fff;
-    }
-
-    .top-akatsuki-cloud::after {
-      width: 35px; /* Adjust scale relative to width */
-      height: 35px;
-      top: -10px;
-      right: 18px;
-      border-top: 3px solid #fff;
-      border-right: 3px solid #fff;
-    }
-    /* ----------------------------------------------- */
 
     .brand-title {
-      font-size: 1.9rem;
+      font-size: 2rem;
       font-weight: bold;
       color: #ff4d4d;
       margin-bottom: 5px;
-      text-shadow: 0 0 10px rgba(255, 77, 77, 0.4);
+      text-shadow: 0 0 12px rgba(255, 77, 77, 0.5);
     }
 
     .sub-heading {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       color: #dddddd;
       margin-bottom: 25px;
+      letter-spacing: 0.5px;
     }
 
     .pin-input {
@@ -163,7 +136,7 @@
 
     .pin-input:focus {
       border-color: #ff4d4d;
-      box-shadow: 0 0 8px rgba(255, 77, 77, 0.4);
+      box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
     }
 
     .btn {
@@ -190,13 +163,14 @@
       display: none;
     }
 
+    /* الصفحة الثانية (تظهر بعد إدخال الرمز الصحيح 666) */
     .main-content {
       display: none;
       text-align: right;
     }
 
     .letter-box {
-      background: rgba(25, 25, 25, 0.8);
+      background: rgba(25, 25, 25, 0.85);
       border: 1px solid #444;
       border-radius: 12px;
       padding: 20px;
@@ -204,11 +178,13 @@
       line-height: 1.8;
       color: #f1f1f1;
       border-right: 4px solid #8b0000;
+      font-size: 1.05rem;
     }
   </style>
 </head>
 <body>
 
+  <!-- الخلفية -->
   <div class="akatsuki-bg">
     <div class="cloud"></div>
     <div class="cloud"></div>
@@ -217,9 +193,10 @@
 
   <div class="container">
     
+    <!-- الصفحة الأولى (القفل) -->
     <div id="lockScreen">
-      <!-- السحابة العلوية الثابتة الجديدة -->
-      <div class="top-akatsuki-cloud"></div>
+      <!-- السحابة الحمراء الأصلية بالأعلى -->
+      <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=200&auto=format&fit=crop" alt="Akatsuki Cloud" class="top-cloud-img" onerror="this.src='https://i.imgur.com/7gXpB5T.png'">
       
       <div class="brand-title">الفلاح</div>
       <div class="sub-heading">رمز الاعتذار</div>
@@ -229,13 +206,14 @@
       <div id="errorMsg" class="error-msg">الرمز غير صحيح، حاول مرة أخرى!</div>
     </div>
 
+    <!-- الصفحة الثانية (محتوى الرسالة) -->
     <div id="mainContent" class="main-content">
       <h3 style="color: #ff4d4d; margin-bottom: 5px; text-align: center;">رسالة خاصة</h3>
       <hr style="border: 0; border-top: 1px solid #444; margin-bottom: 15px;">
       
       <div class="letter-box">
-        أهلاً بك،<br>
-        هنا هتكتب الكلام والرسالة اللي تحبها تظهر للشخص أول ما يفتح الرمز.. (قولي حابب نكتب إيه جوه وهعدلهالك فوراً).
+        السلام عليكم،<br>
+        أكتب لك هذه الرسالة لأعبر لك عن مدى تقديري واعتذاري...
       </div>
     </div>
 
