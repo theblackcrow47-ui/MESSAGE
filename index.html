@@ -6,204 +6,199 @@
   <title>رسالة خاصة - الفلاح</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: #050505; color: #ffffff; min-height: 100vh; display: flex; justify-content: center; align-items: center; position: relative; padding: 20px; }
+    body { background-color: #050505; color: #ffffff; min-height: 100vh; display: flex; justify-content: center; align-items: center; position: relative; overflow-x: hidden; padding: 20px; }
     
-    .akatsuki-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; overflow: hidden; }
-    .cloud { position: absolute; width: 140px; height: 70px; background-color: #8b0000; border: 3px solid #ffffff; border-radius: 50px; opacity: 0.85; box-shadow: 0 0 20px rgba(139, 0, 0, 0.7); animation: floatClouds 16s linear infinite; }
-    .cloud::before, .cloud::after { content: ''; position: absolute; background-color: #8b0000; border-radius: 50%; }
-    .cloud::before { width: 65px; height: 65px; top: -30px; left: 20px; border-top: 3px solid #ffffff; border-left: 3px solid #ffffff; }
-    .cloud::after { width: 45px; height: 45px; top: -20px; right: 25px; border-top: 3px solid #ffffff; border-right: 3px solid #ffffff; }
-    .cloud:nth-child(1) { top: 15%; left: -180px; animation-duration: 20s; transform: scale(0.9); }
-    .cloud:nth-child(2) { top: 50%; left: -180px; animation-duration: 14s; animation-delay: 3s; transform: scale(1.1); }
-    .cloud:nth-child(3) { top: 80%; left: -180px; animation-duration: 22s; animation-delay: 1s; transform: scale(0.8); }
-    @keyframes floatClouds { 0% { left: -180px; } 100% { left: 105vw; } }
+    /* خلفية متساقطة (تأثير الورود/القلوب زي الفيديو) */
+    .falling-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; overflow: hidden; }
+    .petal { position: absolute; background: rgba(255, 77, 77, 0.6); border-radius: 50%; animation: fall linear infinite; }
+    @keyframes fall {
+      0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0.2; }
+    }
 
-    .message-container {
+    /* البطاقة الرئيسية بنفس ستايل الفيديو */
+    .card-container {
       position: relative;
       z-index: 10;
       width: 100%;
-      max-width: 650px;
-      background: rgba(15, 15, 15, 0.95);
-      border: 2px solid rgba(139, 0, 0, 0.6);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+      max-width: 480px;
+      background: rgba(15, 12, 12, 0.95);
+      border: 2px solid #ff4d4d;
+      border-radius: 24px;
+      padding: 25px;
+      box-shadow: 0 0 35px rgba(255, 77, 77, 0.3);
+      backdrop-filter: blur(10px);
       margin: 20px 0;
     }
 
-    .top-cloud-svg {
-      width: 90px;
-      height: 45px;
-      margin: 0 auto 15px auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.6));
+    /* مشغل الفيديو أو الجزء المرئي فوق */
+    .media-box {
+      width: 100%;
+      height: 200px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #ff4d4d;
+      margin-bottom: 15px;
+      background: #000;
+    }
+    .media-box video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    h2 {
+    h3 {
       text-align: center;
       color: #ff4d4d;
-      margin-bottom: 20px;
-      font-size: 1.8rem;
-      text-shadow: 0 0 10px rgba(255, 77, 77, 0.4);
+      margin-bottom: 12px;
+      font-size: 1.5rem;
+      text-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
     }
 
-    .letter-text {
-      background: rgba(25, 25, 25, 0.85);
-      border: 1px solid #444;
+    /* صندوق الرسالة المنظم */
+    .letter-box {
+      background: rgba(25, 20, 20, 0.9);
+      border: 1px solid #442222;
       border-radius: 12px;
-      padding: 20px;
-      line-height: 2;
+      padding: 15px;
+      line-height: 1.8;
       color: #f1f1f1;
-      font-size: 1.05rem;
-      max-height: 350px;
+      font-size: 0.95rem;
+      max-height: 220px;
       overflow-y: auto;
-      margin-bottom: 25px;
-      border-right: 4px solid #8b0000;
+      margin-bottom: 15px;
       text-align: justify;
     }
 
-    /* تشغيل الموسيقى */
-    .music-section {
+    /* مشغل الموسيقى */
+    .music-box {
       text-align: center;
-      margin-bottom: 20px;
-      background: rgba(30, 30, 30, 0.6);
-      padding: 12px;
+      margin-bottom: 15px;
+      background: rgba(30, 20, 20, 0.6);
+      padding: 10px;
       border-radius: 10px;
-      border: 1px solid #555;
+      border: 1px solid #552222;
     }
-
-    .music-section audio {
+    .music-box audio {
       width: 100%;
-      max-width: 300px;
-      height: 35px;
+      height: 32px;
     }
 
-    /* الشات بوكس (خانة إرسال الرسائل) */
-    .chat-box-section {
-      background: rgba(20, 20, 20, 0.9);
-      border: 1px solid #8b0000;
+    /* الشات بوكس (خانة إرسال الرسائل المهمة) */
+    .chat-section {
+      background: rgba(20, 15, 15, 0.95);
+      border: 1px solid #ff4d4d;
       border-radius: 12px;
-      padding: 15px;
-      text-align: right;
+      padding: 12px;
     }
-
-    .chat-box-section h4 {
+    .chat-section h5 {
       color: #ff4d4d;
-      margin-bottom: 10px;
-      font-size: 1.1rem;
+      margin-bottom: 8px;
+      font-size: 1rem;
     }
-
     .chat-textarea {
       width: 100%;
-      height: 90px;
-      padding: 12px;
+      height: 70px;
+      padding: 10px;
       border-radius: 8px;
       border: 1px solid #555;
-      background: #050505;
+      background: #000;
       color: #fff;
-      font-size: 1rem;
+      font-size: 0.95rem;
       resize: none;
       outline: none;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
-
     .chat-textarea:focus {
       border-color: #ff4d4d;
       box-shadow: 0 0 8px rgba(255, 77, 77, 0.4);
     }
-
     .send-btn {
       background: #8b0000;
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 8px 15px;
       border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
-      transition: 0.3s;
       width: 100%;
+      transition: 0.3s;
     }
-
-    .send-btn:hover {
-      background: #b30000;
-    }
-
-    .success-msg {
-      color: #4bb543;
-      margin-top: 8px;
-      font-size: 0.9rem;
-      display: none;
-      text-align: center;
-    }
+    .send-btn:hover { background: #b30000; }
+    .success-msg { color: #4bb543; margin-top: 5px; font-size: 0.85rem; display: none; text-align: center; }
   </style>
 </head>
 <body>
 
-  <div class="akatsuki-bg">
-    <div class="cloud"></div>
-    <div class="cloud"></div>
-    <div class="cloud"></div>
-  </div>
+  <!-- خلفية متساقطة -->
+  <div class="falling-bg" id="fallingBg"></div>
 
-  <div class="message-container">
+  <div class="card-container">
     
-    <div class="top-cloud-svg">
-      <svg viewBox="0 0 240 140" width="100%" height="100%">
-        <path d="M40,110 C20,110 10,95 15,80 C20,70 30,68 35,75 C32,55 50,40 70,45 C80,30 105,30 120,45 C135,30 165,35 170,55 C190,50 205,65 200,85 C215,95 210,115 190,110 Z" fill="#8b0000" stroke="#ffffff" stroke-width="7" stroke-linejoin="round"/>
-      </svg>
+    <!-- فيديو أو صورة مميزة بالاعلى -->
+    <div class="media-box">
+      <video controls autoplay muted loop>
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+        متصفحك لا يدعم الفيديو
+      </video>
     </div>
 
-    <h2>رسالة من الفلاح</h2>
+    <h3>رسالة خاصة لكِ</h3>
 
-    <!-- النص المخصص بالكامل -->
-    <div class="letter-text">
-      انا طبعا بعتذر واسف جدا أن كل الفترة دي مش عارف اوصل بس بجد حاولت بكل الطرق اني اوصلك كلمت جني وجني كانت كل مرة تقولي مش موجودة وانكو مش بتقبلو وانا كل مرة اقولها طب لما تتقبلو خليها تكلمني تقولي ماشي وتطنش بحد ما اتفجات بعد ما كل شوية ارن عليها انها عملتلي بلوك خليت اسماء تكلم جنه بردو فضلت مطنشها حبه لحد ما قالتها انك مش عايزة تكلمي اي وانك كويسة وحدش يسأل عليها تاني بعت اسماء تقولها هي عايزة تكلم محمد تقول انها بذات مش عايزة تكلم محمد وخلي محمد يشوف حياتو بعيد عنها وربنا يعوضو وبتقولو إن شاء الله يشوف حد احسن منها انا طبعا مش هقولك أن انا في اليوم دا كنت مدمر مليش نفس لاي حاجة لا اكل ولا شرب ولا حتي نوم بس قولت لنافسي لازم بردو اوصل ليها واسالها بنفسي كلمت حبيبة وقالتلي انكو متخنقين ومش بتكلمو بعض قولتلها طيب حولي حتي توصليني ليها باي شكل قالتلي ماشي وتاني يوم قالت انك مش عارفة توصل ليكي حتي صحابها وانك جبتي خط جديد ورقم جديد ومش مديها لحد وانا من ساعتها مش عارف اوصل ليكي خالص.
+    <!-- نص الرسالة الكاملة -->
+    <div class="letter-box">
+      انا طبعا بعتذر واسف جدا أن كل الفترة دي مش عارف اوصل بس بجد حاولت بكل الطرق اني اوصلك كلمت جني وجني كانت كل مرة تقولي مش موجودة وانكو مش بتقبلو وانا كل مرة اقولها طب لما تتقبلو خليها تكلمني تقولي ماشي وتطنش بحد ما اتفجات بعد ما كل شوية ارن عليها انها عملتلي بلوك خليت اسماء تكلم جنه بردو فضلت مطنشها حبه لحد ما قالتها انك مش عايزة تكلمي اي وانك كويسة وحدش يسأل عليها تاني بعت اسماء تقولها هي عايزة تكلم محمد تقول انها بذات مش عايزة تكلم محمد وخلي محمد يشوف حياتو بعيد عنها وربنا يعوضو وبتقولو إن شاء الله يشوف حد احسن منها انا طبعا مش هقولك أن انا في اليوم دا كنت مدمر مليش نفس لاي حاجه لا اكل ولا شرب ولا حتي نوم بس قولت لنافسي لازم بردو اوصل ليها واسالها بنفسي كلمت حبيبة وقالتلي انكو متخنقين ومش بتكلمو بعض قولتلها طيب حولي حتي توصليني ليها باي شكل قالتلي ماشي وتاني يوم قالت انك مش عارفة توصل ليكي حتي صحابها وانك جبتي خط جديد ورقم جديد ومش مديها لحد وانا من ساعتها مش عارف اوصل ليكي خالص.
       <br><br>
-      بس طول الفترة انا مش ناسيكي وفاكر جني لما قالتلي شوف حياتك انتي حياتي ومحيش احسن مينك ولو في بردو انا عايزك انتي لأن قولتلك انا مش هفرط فيكي ابدا ولا هسيبك تضيعي مني بكل سهولة عارف ومقدر حجم المشكلة الي عملتها ليكي بس والله كان غصب عني وكنت عايز اوصلك واسف بجد علي كل حاجه اهلك عملوها بسببي بس انا والله بحبك حب محدش يعرف بيه غير ربنا وانا بس لان بجد عايزك مش بتسلي ولا بلعب لا عايزك تكوني ليا انا وبس عارف اني كنت بعيد الفترة دي بس مكنش بمزاجي انا بجد مكنتش عارف اوصل لدرجة أن كلمت هبة اني اوصلك وهي قالتلي انكو مش بتتكلمو أن هي كمان مش عارفة توصلك بس وعز وجلالة الله لا نسيتك لاحظة وحشتيني بكل معني الكلمة نفسي اشوفك نفسي اسمع صوتك نفسي حتي اتكلم معاكي لدرجة أن بفتح الشات بتعانا وافضل اقلب فيه طول الوقت وحشني حتي بلوكتك وزعلك مني وانا افضل أصلحك كنتي بتساليني انت ليه علي طول تبص عليا وانا شغالة كنت عامل حساب يوم زي دا كنت عارف انها نعمة كبيرة انك تبقي واقفة قدامي وان اسمع صوتك في المخزن دا كان حاجة كبيرة اوي حبيتك حب واكتشفت انك حبي الاول برغم انك مكنتيش الأولي بس كان الحب الاول اتعلقت بيكي اوي اوي.
+      بس طول الفترة انا مش ناسيكي وفاكر جني لما قالتلي شوف حياتك انتي حياتي ومفيش احسن مينك ولو في بردو انا عايزك انتي لأن قولتلك انا مش هفرط فيكي ابدا ولا هسيبك تضيعي مني بكل سهولة عارف ومقدر حجم المشكلة الي عملتها ليكي بس والله كان غصب عني وكنت عايز اوصلك واسف بجد علي كل حاجه اهلك عملوها بسببي بس انا والله بحبك حب محدش يعرف بيه غير ربنا وانا بس لان بجد عايزك مش بتسلي ولا بلعب لا عايزك تكوني ليا انا وبس عارف اني كنت بعيد الفترة دي بس مكنش بمزاجي انا بجد مكنتش عارف اوصل لدرجة أن كلمت هبة اني اوصلك وهي قالتلي انكو مش بتتكلمو أن هي كمان مش عارفة توصلك بس وعز وجلالة الله لا نسيتك لاحظة وحشتيني بكل معني الكلمة نفسي اشوفك نفسي اسمع صوتك نفسي حتي اتكلم معاكي لدرجة أن بفتح الشات بتعانا وافضل اقلب فيه طول الوقت وحشني حتي بلوكتك وزعلك مني وانا افضل أصلحك كنتي بتساليني انت ليه علي طول تبص عليا وانا شغالة كنت عامل حساب يوم زي دا كنت عارف انها نعمة كبيرة انك تبقي واقفة قدامي وان اسمع صوتك في المخزن دا كان حاجة كبيرة اوي حبيتك حب واكتشفت انك حبي الاول برغم انك مكنتيش الأولي بس كان الحب الاول اتعلقت بيكي اوي اوي.
       <br><br>
-      خايف اخسرك عايز اقولك انك كنتي اول واخر حد فتحت ليا قلبو الشخص الوحيد الي اديتو كل مشاعر الحب بقيتي جزء من روحي كل لحظة في بالي بقيت حتي اتخيل وجودك عشان اكون مبسوط بقيت افتكر بما كنت بشوفك وطريقة كلامك وكل حاجه فيكي عشان افرح وبرغم كدا انا مش فرحان عشان احنا بعاد عن بعض بقيت كل شوية افتكر كلمة يا فلاح علي طول منك افتكرتك وانتي بتقولي يوه في نص المخزن افتكر بما كنتي بتضيقي لما اقولك كيوتة مش ناسيكي خالص انا عملت كدا عشان عايز اوصلك باي طريقة عملت كدا عشان عايز رد منك عملت كدا عشان بحبك وحشتيني اوي ومش لازم نتكلم كل يوم عشان مش عايز اعملك مشكلة بس مش عايزك غير تطمنيني انك ليا انا الفترة دي اصعب فترة في حياتي بقيت بقع في مشاكل كتير ومبقاش ليا نفس للحياه بقيت عايش علي امل واحد أنتي وبس لدراجة اني بدات في مشروع وارجع شغلي القديم وملقتش انسب من اسم فارس عشان لما بزهق بشوف كلمة فارس بجد انتي اخر امل ليا وبحار الحياة برغم الي عمالة اعملو فيا عشانك انتي وعشان عايز اوصل ليكي.
+      خايف اخسرك عايز اقولك انك كنتي اول واخر حد فتحت ليا قلبو الشخص الوحيد الي اديتو كل مشاعر الحب بقيتي جزء من روحي كل لحظه في بالي بقيت حتي اتخيل وجودك عشان اكون مبسوط بقيت افتكر بما كنت بشوفك وطريقة كلامك وكل حاجه فيكي عشان افرح وبرغم كدا انا مش فرحان عشان احنا بعاد عن بعض بقيت كل شوية افتكر كلمة يا فلاح علي طول منك افتكرتك وانتي بتقولي يوه في نص المخزن افتكر بما كنتي بتضيقي لما اقولك كيوتة مش ناسيكي خالص انا عملت كدا عشان عايز اوصلك باي طريقة عملت كدا عشان عايز رد منك عملت كدا عشان بحبك وحشتيني اوي ومش لازم نتكلم كل يوم عشان مش عايز اعملك مشكلة بس مش عايزك غير تطمنيني انك ليا انا الفترة دي اصعب فترة في حياتي بقيت بقع في مشاكل كتير ومبقاش ليا نفس للحياه بقيت عايش علي امل واحد أنتي وبس لدراجة اني بدات في مشروع وارجع شغلي القديم وملقتش انسب من اسم فارس عشان لما بزهق بشوف كلمة فارس بجد انتي اخر امل ليا وبحار الحياة برغم الي عمالة اعملو فيا عشانك انتي وعشان عايز اوصل ليكي.
     </div>
 
     <!-- مشغل الموسيقى -->
-    <div class="music-section">
-      <p style="font-size: 0.9rem; color: #ccc; margin-bottom: 5px;">🎵 موسيقى الخلفية</p>
+    <div class="music-box">
       <audio controls autoplay loop>
         <source src="https://www.bensound.com/bensound-music/bensound-tenderness.mp3" type="audio/mpeg">
-        متصفحك لا يدعم مشغل الصوت
       </audio>
     </div>
 
-    <!-- الشات بوكس (إرسال رسالة) -->
-    <div class="chat-box-section">
-      <h4>اتركِ رسالة هنا وسأراها فوراً:</h4>
-      <textarea id="userMessage" class="chat-textarea" placeholder="اكتبي ردك أو رسالتك هنا..."></textarea>
-      <button class="send-btn" onclick="sendMessage()">إرسال الرسالة</button>
-      <div id="successMsg" class="success-msg">تم إرسال رسالتك بنجاح وحفظها!</div>
+    <!-- شات بوكس (إرسال رسالة لتراها لاحقاً) -->
+    <div class="chat-section">
+      <h5>اكتبي ردك أو رسالتك هنا:</h5>
+      <textarea id="replyMsg" class="chat-textarea" placeholder="اكتبي رسالتك وسأراها عند فتح الموقع..."></textarea>
+      <button class="send-btn" onclick="saveReply()">إرسال الرسالة</button>
+      <div id="replySuccess" class="success-msg">تم إرسال رسالتك وحفظها بنجاح!</div>
     </div>
 
   </div>
 
   <script>
-    function sendMessage() {
-      const msg = document.getElementById('userMessage').value.trim();
-      const successMsg = document.getElementById('successMsg');
-      
-      if(msg !== "") {
-        // حفظ الرسالة في ذاكرة المتصفح المحلية عشان تقدر تشوفها لو فتحت بعدين
-        let messages = JSON.parse(localStorage.getItem('siteMessages') || '[]');
-        messages.push({text: msg, date: new Date().toLocaleString()});
-        localStorage.setItem('siteMessages', JSON.stringify(messages));
+    // توليد تأثير الورود/القلوب المتساقطة في الخلفية
+    const bg = document.getElementById('fallingBg');
+    for (let i = 0; i < 20; i++) {
+      let p = document.createElement('div');
+      p.className = 'petal';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.top = -10 + 'vh';
+      p.style.width = (Math.random() * 10 + 8) + 'px';
+      p.style.height = p.style.width;
+      p.style.animationDuration = (Math.random() * 5 + 5) + 's';
+      p.style.animationDelay = (Math.random() * 5) + 's';
+      bg.appendChild(p);
+    }
+
+    function saveReply() {
+      const text = document.getElementById('replyMsg').value.trim();
+      const msgDiv = document.getElementById('replySuccess');
+      if(text !== "") {
+        let list = JSON.parse(localStorage.getItem('messagesFromHer') || '[]');
+        list.push({content: text, time: new Date().toLocaleString()});
+        localStorage.setItem('messagesFromHer', JSON.stringify(list));
         
-        successMsg.style.display = 'block';
-        document.getElementById('userMessage').value = '';
-        
-        setTimeout(() => {
-          successMsg.style.display = 'none';
-        }, 4000);
+        msgDiv.style.display = 'block';
+        document.getElementById('replyMsg').value = '';
+        setTimeout(() => msgDiv.style.display = 'none', 4000);
       } else {
-        alert("من فضلك اكتب رسالة أولاً!");
+        alert("من فضلك اكتبِ رسالة أولاً!");
       }
     }
   </script>
