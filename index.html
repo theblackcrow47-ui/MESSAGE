@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>رسالة خاصة</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #0a0a0a; color: #ffffff; min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow-x: hidden; position: relative; }
+    .akatsuki-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; overflow: hidden; pointer-events: none; }
+    .cloud { position: absolute; width: 140px; height: 70px; background-color: #8b0000; border: 3px solid #ffffff; border-radius: 50px; opacity: 0.85; box-shadow: 0 0 15px rgba(139, 0, 0, 0.6); animation: floatClouds 18s linear infinite; }
+    .cloud::before, .cloud::after { content: ''; position: absolute; background-color: #8b0000; border-radius: 50%; }
+    .cloud::before { width: 65px; height: 65px; top: -30px; left: 20px; border-top: 3px solid #ffffff; border-left: 3px solid #ffffff; }
+    .cloud::after { width: 45px; height: 45px; top: -20px; right: 25px; border-top: 3px solid #ffffff; border-right: 3px solid #ffffff; }
+    .cloud:nth-child(1) { top: 10%; left: -150px; animation-duration: 22s; transform: scale(0.9); }
+    .cloud:nth-child(2) { top: 40%; left: -150px; animation-duration: 16s; animation-delay: 4s; transform: scale(1.2); }
+    .cloud:nth-child(3) { top: 75%; left: -150px; animation-duration: 25s; animation-delay: 1s; transform: scale(0.8); }
+    .cloud:nth-child(4) { top: 25%; left: -150px; animation-duration: 19s; animation-delay: 8s; transform: scale(1.1); }
+    @keyframes floatClouds { 0% { left: -180px; } 100% { left: 105vw; } }
+    .container { position: relative; z-index: 10; width: 90%; max-width: 500px; background: rgba(18, 18, 18, 0.9); border: 1px solid rgba(225, 0, 0, 0.3); border-radius: 16px; padding: 30px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); text-align: center; }
+    .lock-card h2 { color: #ff4d4d; margin-bottom: 12px; font-size: 1.4rem; }
+    .lock-card p { color: #cccccc; margin-bottom: 20px; font-size: 0.95rem; }
+    .pin-input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: #fff; font-size: 1.2rem; text-align: center; letter-spacing: 4px; outline: none; margin-bottom: 15px; }
+    .pin-input:focus { border-color: #ff4d4d; }
+    .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; background: #8b0000; color: white; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    .btn:hover { background: #b30000; }
+    .error-msg { color: #ff4d4d; margin-top: 10px; font-size: 0.85rem; display: none; }
+    .main-content { display: none; text-align: right; }
+    .header-badge { display: inline-block; background: #8b0000; color: #fff; padding: 6px 16px; border-radius: 20px; font-size: 1.2rem; font-weight: bold; margin-bottom: 8px; box-shadow: 0 0 10px rgba(139, 0, 0, 0.5); }
+    .sub-title { color: #aaa; font-size: 0.9rem; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+    .letter-body { background: rgba(30, 30, 30, 0.7); padding: 15px; border-radius: 10px; line-height: 1.7; color: #eee; margin-bottom: 25px; border-right: 4px solid #8b0000; }
+    .chat-section { margin-top: 20px; }
+    .chat-section h4 { margin-bottom: 10px; color: #ddd; font-size: 0.95rem; }
+    .chat-section textarea { width: 100%; height: 90px; background: #000; border: 1px solid #444; border-radius: 8px; color: #fff; padding: 10px; resize: none; outline: none; margin-bottom: 10px; }
+    .chat-section textarea:focus { border-color: #ff4d4d; }
+    .success-feedback { color: #4dff88; font-size: 0.85rem; margin-top: 8px; display: none; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="akatsuki-bg">
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+    <div class="cloud"></div>
+  </div>
+  <div class="container">
+    <div id="lockScreen" class="lock-card">
+      <h2>الرمز هو رمز الاعتذار</h2>
+      <p>أدخل الرمز السري للمتابعة</p>
+      <input type="password" id="pinInput" class="pin-input" placeholder="***" maxlength="3">
+      <button class="btn" onclick="checkPin()">فتح الرسالة</button>
+      <div id="errorMsg" class="error-msg">الرمز غير صحيح، حاول مرة أخرى!</div>
+    </div>
+    <div id="mainContent" class="main-content">
+      <div style="text-align: right;">
+        <span class="header-badge">الفلاح</span>
+        <div class="sub-title">رسالة من الفلاح</div>
+      </div>
+      <div class="letter-body">
+        السلام عليكم،<br>أكتب لك هذه الرسالة لأعبر لك عن مدى تقديري...
+      </div>
+      <div class="chat-section">
+        <h4>اكتب ردك أو رسالتك هنا:</h4>
+        <textarea id="userReply" placeholder="اكتب رسالتك هنا..."></textarea>
+        <button class="btn" onclick="sendReply()">إرسال الرسالة</button>
+        <div id="successFeedback" class="success-feedback">تم إرسال رسالتك وحفظها بنجاح!</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function checkPin() {
+      const pin = document.getElementById('pinInput').value;
+      const errorMsg = document.getElementById('errorMsg');
+      if (pin === '666') {
+        document.getElementById('lockScreen').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+      } else {
+        errorMsg.style.display = 'block';
+      }
+    }
+    function sendReply() {
+      const replyText = document.getElementById('userReply').value;
+      const feedback = document.getElementById('successFeedback');
+      if (replyText.trim() !== "") {
+        let savedMessages = JSON.parse(localStorage.getItem('messagesFromUser')) || [];
+        savedMessages.push({ date: new Date().toLocaleString('ar-EG'), text: replyText });
+        localStorage.setItem('messagesFromUser', JSON.stringify(savedMessages));
+        feedback.style.display = 'block';
+        document.getElementById('userReply').value = '';
+      }
+    }
+  </script>
+</body>
+</html>
