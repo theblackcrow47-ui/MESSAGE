@@ -81,14 +81,13 @@
       100% { left: 105vw; }
     }
 
-    /* صندوق الواجهة الرئيسية */
     .container {
       position: relative;
       z-index: 10;
       width: 90%;
       max-width: 420px;
-      background: rgba(15, 15, 15, 0.85);
-      border: 2px solid rgba(139, 0, 0, 0.5);
+      background: rgba(15, 15, 15, 0.9);
+      border: 2px solid rgba(139, 0, 0, 0.6);
       border-radius: 20px;
       padding: 35px 25px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
@@ -96,27 +95,26 @@
       text-align: center;
     }
 
-    /* الغيمة الحمراء الثابتة فوق */
+    /* الغيمة الحمراء فوق العنوان */
     .top-cloud-icon {
-      width: 80px;
-      height: 40px;
+      width: 75px;
+      height: 38px;
       background-color: #8b0000;
       border: 2px solid #ffffff;
       border-radius: 30px;
-      margin: 0 auto 15px auto;
+      margin: 0 auto 12px auto;
       position: relative;
-      box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
-      animation: pulseCloud 2s ease-in-out infinite;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
     }
     .top-cloud-icon::before {
       content: '';
       position: absolute;
       background-color: #8b0000;
       border-radius: 50%;
-      width: 35px;
-      height: 35px;
-      top: -16px;
-      left: 12px;
+      width: 32px;
+      height: 32px;
+      top: -15px;
+      left: 10px;
       border-top: 2px solid #fff;
       border-left: 2px solid #fff;
     }
@@ -125,21 +123,16 @@
       position: absolute;
       background-color: #8b0000;
       border-radius: 50%;
-      width: 25px;
-      height: 25px;
-      top: -10px;
-      right: 15px;
+      width: 22px;
+      height: 22px;
+      top: -9px;
+      right: 12px;
       border-top: 2px solid #fff;
       border-right: 2px solid #fff;
     }
 
-    @keyframes pulseCloud {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-    }
-
     .brand-title {
-      font-size: 1.8rem;
+      font-size: 1.9rem;
       font-weight: bold;
       color: #ff4d4d;
       margin-bottom: 5px;
@@ -147,10 +140,9 @@
     }
 
     .sub-heading {
-      font-size: 1rem;
-      color: #cccccc;
+      font-size: 1.05rem;
+      color: #dddddd;
       margin-bottom: 25px;
-      letter-spacing: 1px;
     }
 
     .pin-input {
@@ -196,9 +188,21 @@
       display: none;
     }
 
+    /* الصفحة الثانية */
     .main-content {
       display: none;
       text-align: right;
+    }
+
+    .letter-box {
+      background: rgba(25, 25, 25, 0.8);
+      border: 1px solid #444;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 15px;
+      line-height: 1.8;
+      color: #f1f1f1;
+      border-right: 4px solid #8b0000;
     }
   </style>
 </head>
@@ -212,6 +216,7 @@
 
   <div class="container">
     
+    <!-- الصفحة الأولى -->
     <div id="lockScreen">
       <div class="top-cloud-icon"></div>
       <div class="brand-title">الفلاح</div>
@@ -222,19 +227,25 @@
       <div id="errorMsg" class="error-msg">الرمز غير صحيح، حاول مرة أخرى!</div>
     </div>
 
+    <!-- الصفحة الثانية (تفتح لما يدخل 666) -->
     <div id="mainContent" class="main-content">
-      <h2>أهلاً بك، تم فتح الصفحة بنجاح!</h2>
-      <p style="margin-top: 10px; color: #aaa;">جاهز لتجهيز الرسالة وموسيقى الخلفية معاك خطوة بخطوة.</p>
+      <h3 style="color: #ff4d4d; margin-bottom: 5px; text-align: center;">رسالة خاصة</h3>
+      <hr style="border: 0; border-top: 1px solid #444; margin-bottom: 15px;">
+      
+      <div class="letter-box">
+        أهلاً بك،<br>
+        هنا هتكتب الكلام والرسالة اللي تحبها تظهر للشخص أول ما يفتح الرمز.. (قولي حابب نكتب إيه جوه وهعدلهالك فوراً).
+      </div>
     </div>
 
   </div>
 
   <script>
     function checkPin() {
-      const pin = document.getElementById('pinInput5').value || document.getElementById('pinInput').value;
+      const pin = document.getElementById('pinInput').value;
       const errorMsg = document.getElementById('errorMsg');
       
-      if (document.getElementById('pinInput').value === '666') {
+      if (pin === '666') {
         document.getElementById('lockScreen').style.display = 'none';
         document.getElementById('mainContent').style.display = 'block';
       } else {
