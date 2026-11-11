@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>رسالة خاصة - الفلاح</title>
+  <title>الفلاح - رسالة خاصة</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background-color: #050505; color: #ffffff; min-height: 100vh; display: flex; justify-content: center; align-items: center; position: relative; overflow-x: hidden; padding: 20px; }
@@ -16,8 +16,71 @@
       100% { transform: translateY(110vh) rotate(360deg); opacity: 0.2; }
     }
 
-    /* البطاقة الرئيسية */
-    .card-container {
+    /* 1. صفحة القفل ورقم السر */
+    #lockPage {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 400px;
+      background: rgba(15, 12, 12, 0.95);
+      border: 2px solid #ff4d4d;
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 0 35px rgba(255, 77, 77, 0.3);
+      backdrop-filter: blur(10px);
+    }
+    .lock-title {
+      color: #ff4d4d;
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+    }
+    .lock-desc {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+    .pin-input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #555;
+      background: #000;
+      color: #fff;
+      font-size: 1.2rem;
+      text-align: center;
+      letter-spacing: 3px;
+      outline: none;
+      margin-bottom: 15px;
+    }
+    .pin-input:focus {
+      border-color: #ff4d4d;
+      box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+    }
+    .enter-btn {
+      width: 100%;
+      background: #8b0000;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .enter-btn:hover { background: #b30000; }
+    .error-msg {
+      color: #ff4d4d;
+      font-size: 0.85rem;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* 2. الصفحة الثانية (مخفية لحين إدخال الرمز) */
+    #mainContent {
+      display: none;
       position: relative;
       z-index: 10;
       width: 100%;
@@ -31,7 +94,7 @@
       margin: 20px 0;
     }
 
-    /* صورتك الشخصية الحقيقية */
+    /* الصورة العلوية */
     .image-box {
       width: 100%;
       height: 220px;
@@ -40,9 +103,6 @@
       border: 1px solid #ff4d4d;
       margin-bottom: 15px;
       background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
     .image-box img {
       width: 100%;
@@ -67,10 +127,26 @@
       line-height: 1.9;
       color: #f1f1f1;
       font-size: 0.95rem;
-      max-height: 250px;
+      max-height: 280px;
       overflow-y: auto;
       margin-bottom: 15px;
       text-align: justify;
+    }
+
+    /* الصورة السفلية المضافة بعد الرسالة */
+    .sub-image-box {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #ff4d4d;
+      margin-bottom: 15px;
+      background: #000;
+      box-shadow: 0 0 15px rgba(255, 77, 77, 0.2);
+    }
+    .sub-image-box img {
+      width: 100%;
+      display: block;
+      object-fit: contain;
     }
 
     /* مشغل الموسيقى */
@@ -129,7 +205,7 @@
     }
     .send-btn:hover { background: #b30000; }
 
-    /* صندوق التعليقات السحابية */
+    /* صندوق التعليقات */
     .comments-list {
       margin-top: 15px;
       max-height: 150px;
@@ -157,27 +233,42 @@
   <!-- خلفية متساقطة -->
   <div class="falling-bg" id="fallingBg"></div>
 
-  <div class="card-container">
+  <!-- 1. شاشة القفل والرمز السري -->
+  <div id="lockPage">
+    <h2 class="lock-title">موقع الفلاح</h2>
+    <p class="lock-desc">ادخلي الرمز السري لفتح الرسالة الخاصة</p>
+    <input type="password" id="pinCode" class="pin-input" placeholder="أدخلي الرمز هنا">
+    <button class="enter-btn" onclick="checkPin()">دخول</button>
+    <div id="errorMsg" class="error-msg">الرمز السري غير صحيح، حاولي مرة أخرى!</div>
+  </div>
+
+  <!-- 2. محتوى الصفحة الرئيسية (يفتح عند كتابة الرمز الصحيح) -->
+  <div id="mainContent">
     
-    <!-- صورتك الشخصية الحقيقية بالأعلى -->
+    <!-- الصورة العلوية -->
     <div class="image-box">
       <img src="https://i.ibb.co/N22KC2zz/Chat-GPT-Image-23-2026-01-54-43-2.png" alt="Fares Image">
     </div>
 
     <h3>رسالة خاصة لكِ</h3>
 
-    <!-- الرسالة كاملة بدون أي نقص -->
+    <!-- الرسالة النصية الكالمة بدون أي اختصار -->
     <div class="letter-box">
-      انا طبعا بعتذر واسف جدا أن كل الفترة دي مش عارف اوصل بس بجد حاولت بكل الطرق اني اوصلك كلمت جني وجني كانت كل مرة تقولي مش موجودة وانكو مش بتقبلو وانا كل مرة اقولها طب لما تتقبلو خليها تكلمني تقولي ماشي وتطنش بحد ما اتفجات بعد ما كل شوية ارن عليها انها عملتلي بلوك خليت اسماء تكلم جنه بردو فضلت مطنشها حبه لحد ما قالتها انك مش عايزة تكلمي اي وانك كويسة وحدش يسأل عليها تاني بعت اسماء تقولها هي عايزة تكلم محمد تقول انها بذات مش عايزة تكلم محمد وخلي محمد يشوف حياتو بعيد عنها وربنا يعوضو وبتقولو إن شاء الله يشوف حد احسن منها انا طبعا مش هقولك أن انا في اليوم دا كنت مدمر مليش نفس لاي حاجة لا اكل ولا شرب ولا حتي نوم بس قولت لنافسي لازم بردو اوصل ليها واسالها بنفسي كلمت حبيبة وقالتلي انكو متخنقين ومش بتكلمو بعض قولتلها طيب حولي حتي توصليني ليها باي شكل قالتلي ماشي وتاني يوم قالت انك مش عارفة توصل ليكي حتي صحابها وانك جبتي خط جديد ورقم جديد ومش مديها لحد وانا من ساعتها مش عارف اوصل ليكي خالص.
+      انا طبعا بعتذر واسف جدا أن كل الفترة دي مش عارف اوصل بس بجد حاولت بكل الطرق اني اوصلك كلمت جني وجني كانت كل مرة تقولي مش موجودة وانكو مش بتتقبلو وانا كل مرة اقولها طب لما تتقبلو خليها تكلمني تقولي ماشي وتطنش لحد ما اتفجات بعد ما كل شوية ارن عليها انها عملتلي بلوك خليت اسماء تكلم جنه بردو فضلت مطنشها حبه لحد ما قالتها انك مش عايزة تكلمي اي حد وانك كويسة ومحدش يسأل عليها تاني بعت اسماء تقولها محمد عايز يكلمها تقول انها بذات مش عايزة تكلم محمد وخلي محمد يشوف حياتو بعيد عنها وربنا يعوضو وبتقولو إن شاء الله يشوف حد احسن منها انا طبعا مش هقولك أن انا في اليوم دا كنت مدمر مليش نفس لاي حاجة لا اكل ولا شرب ولا حتي نوم بس قولت لنافسي لازم بردو اوصل ليها واسالها بنفسي كلمت حبيبة وقالتلي انكو متخنقين ومش بتكلمو بعض قولتلها طيب حولي حتي توصليني ليها باي شكل قالتلي ماشي وتاني يوم قالت انك مش عارفة توصل ليكي حتي صحابها وانك جبتي خط جديد ورقم جديد ومش مديها لحد وانا من ساعتها مش عارف اوصل ليكي خالص.
       <br><br>
-      بس طول الفترة انا مش ناسيكي وفاكر جني لما قالتلي شوف حياتك انتي حياتي ومفيش احسن مينك ولو في بردو انا عايزك انتي لأن قولتلك انا مش هفرط فيكي ابدا ولا هسيبك تضيعي مني بكل سهولة عارف ومقدر حجم المشكلة الي عملتها ليكي بس والله كان غصب عني وكنت عايز اوصلك واسف بجد علي كل حاجة اهلك عملوها بسببي بس انا والله بحبك حب محدش يعرف بيه غير ربنا وانا بس لان بجد عايزك مش بتسلي ولا بلعب لا عايزك تكوني ليا انا وبس عارف اني كنت بعيد الفترة دي بس مكنش بمزاجي انا بجد مكنتش عارف اوصل لدرجة أن كلمت هبة اني اوصلك وهي قالتلي انكو مش بتتكلمو أن هي كمان مش عارفة توصلك بس وعز وجلالة الله لا نسيتك لاحظة وحشتيني بكل معني الكلمة نفسي اشوفك نفسي اسمع صوتك نفسي حتي اتكلم معاكي لدرجة أن بفتح الشات بتعانا وافضل اقلب فيه طول الوقت وحشني حتي بلوكتك وزعلك مني وانا افضل أصلحك كنتي بتساليني انت ليه علي طول تبص عليا وانا شغالة كنت عامل حساب يوم زي دا كنت عارف انها نعمة كبيرة انك تبقي واقفة قدامي وان اسمع صوتك في المخزن دا كان حاجة كبيرة اوي حبيتك حب واكتشفت انك حبي الاول برغم انك مكنتيش الأولي بس كان الحب الاول اتعلقت بيكي اوي اوي.
+      بس طول الفترة انا مش ناسيكي وفاكر جني لما قالتلي شوف حياتك انتي حياتي ومفيش احسن منك ولو في بردو انا عايزك انتي لأن قولتلك انا مش هفرط فيكي ابدا ولا هسيبك تضيعي مني بكل سهولة عارف ومقدر حجم المشكلة الي عملتها ليكي بس والله كان غصب عني وكنت عايز اوصلك واسف بجد علي كل حاجة اهلك عملوها بسببي بس انا والله بحبك حب محدش يعرف بيه غير ربنا وانا بس لان بجد عايزك مش بتسلي ولا بلعب لا عايزك تكوني ليا انا وبس عارف اني كنت بعيد الفترة دي بس مكنش بمزاجي انا بجد مكنتش عارف اوصل لدرجة أن كلمت هبة اني اوصلك وهي قالتلي انكو مش بتتكلمو أن هي كمان مش عارفة توصلك بس وعز وجلالة الله لا نسيتك لاحظة وحشتيني بكل معني الكلمة نفسي اشوفك نفسي اسمع صوتك نفسي حتي اتكلم معاكي لدرجة أن بفتح الشات بتعانا وافضل اقلب فيه طول الوقت وحشني حتي بلوكتك وزعلك مني وانا افضل أصلحك كنتي بتساليني انت ليه علي طول تبص عليا وانا شغالة كنت عامل حساب يوم زي دا كنت عارف انها نعمة كبيرة انك تبقي واقفة قدامي وان اسمع صوتك في المخزن دا كان حاجة كبيرة اوي حبيتك حب واكتشفت انك حبي الاول برغم انك مكنتيش الأولي بس كان الحب الاول اتعلقت بيكي اوي اوي.
       <br><br>
-      خايف اخسرك عايز اقولك انك كنتي اول واخر حد فتحت ليا قلبو الشخص الوحيد الي اديتو كل مشاعر الحب بقيتي جزء من روحي كل لحظة في بالي بقيت حتي اتخيل وجودك عشان اكون مبسوط بقيت افتكر بما كنت بشوفك وطريقة كلامك وكل حاجة فيكي عشان افرح وبرغم كدا انا مش فرحان عشان احنا بعاد عن بعض بقيت كل شوية افتكر كلمة يا فلاح علي طول منك افتكرتك وانتي بتقولي يوه في نص المخزن افتكر بما كنتي بتضيقي لما اقولك كيوتة مش ناسيكي خالص انا عملت كدا عشان عايز اوصلك باي طريقة عملت كدا عشان عايز رد منك عملت كدا عشان بحبك وحشتيني اوي ومش لازم نتكلم كل يوم عشان مش عايز اعملك مشكلة بس مش عايزك غير تطمنيني انك ليا انا الفترة دي اصعب فترة في حياتي بقيت بقع في مشاكل كتير ومبقاش ليا نفس للحياه بقيت عايش علي امل واحد أنتي وبس لدراجة اني بدات في مشروع وارجع شغلي القديم وملقتش انسب من اسم فارس عشان لما بزهق بشوف كلمة فارس بجد انتي اخر امل ليا وبحار الحياة برغم الي عمالة اعملو فيا عشانك انتي وعشان عايز اوصل ليكي.
+      خايف اخسرك عايز اقولك انك كنتي اول واخر حد فتحت ليا قلبي الشخص الوحيد الي اديتو كل مشاعر الحب بقيتي جزء من روحي كل لحظة في بالي بقيت حتي اتخيل وجودك عشان اكون مبسوط بقيت افتكر لما كنت بشوفك وطريقة كلامك وكل حاجة فيكي عشان افرح وبرغم كدا انا مش فرحان عشان احنا بعاد عن بعض بقيت كل شوية افتكر كلمة يا فلاح علي طول منك افتكرتك وانتي بتقولي يوه في نص المخزن افتكر لما كنتي بتضيقي لما اقولك كيوتة مش ناسيكي خالص انا عملت كدا عشان عايز اوصلك باي طريقة عملت كدا عشان عايز رد منك عملت كدا عشان بحبك وحشتيني اوي ومش لازم نتكلم كل يوم عشان مش عايز اعملك مشكلة بس مش عايزك غير تطمنيني انك ليا انا الفترة دي اصعب فترة في حياتي بقيت بقع في مشاكل كتير ومبقاش ليا نفس للحياه بقيت عايش علي امل واحد أنتي وبس لدراجة اني بدات في مشروع وارجع شغلي القديم وملقتش انسب من اسم فارس عشان لما بزهق بشوف كلمة فارس واللوجو والاسم الي فوق دول هما لوجو المشروع بجد انتي اخر امل ليا وبحارب الحياة برغم الي عمالة تعملو فيا عشانك انتي وعشان عايز اوصل ليكي عايزك تردي عليا هتلاقي تحت شات بوكس عايزك تتكلمي فيه براحتك بس عشان خطري ردي عليا.
+    </div>
+
+    <!-- الصورة المضافة أسفل الرسالة -->
+    <div class="sub-image-box">
+      <img src="https://i.ibb.co/Gv4TCZcp/Screenshot-com-android-chrome.jpg" alt="Extra Image">
     </div>
 
     <!-- مشغل الموسيقى -->
     <div class="music-box">
-      <audio controls autoplay loop>
+      <audio id="bgMusic" controls loop>
         <source src="https://www.bensound.com/bensound-music/bensound-tenderness.mp3" type="audio/mpeg">
       </audio>
     </div>
@@ -188,16 +279,19 @@
       <textarea id="replyMsg" class="chat-textarea" placeholder="اكتبي رسالتك هنا..."></textarea>
       <button class="send-btn" onclick="postComment()">إرسال الرسالة</button>
       
-      <!-- قائمة التعليقات السحابية -->
+      <!-- قائمة التعليقات -->
       <div id="commentsContainer" class="comments-list"></div>
     </div>
 
   </div>
 
   <script>
-    // بيانات السحابة (JSONBin)
+    // البيانات السحابية (JSONBin)
     const BIN_ID = "6af4f08fac6210605a80d792";
     const API_KEY = "$2a$10$Ftg9K8ikxnYLE3//x0ynTOCrnJKlrKkprb6Qg.aeLYaZaRy8W.xFu";
+    
+    // الرمز السري الصحيح للدخول (يمكنك تغييره من هنا إذا أردت)
+    const CORRECT_PIN = "1234";
 
     // تأثير الورود المتساقطة
     const bg = document.getElementById('fallingBg');
@@ -213,11 +307,25 @@
       bg.appendChild(p);
     }
 
-    // تحميل التعليقات من السحابة تلقائياً عند فتح الصفحة
-    window.onload = function() {
-      loadCommentsFromServer();
-    };
+    // التحقق من الرمز السري
+    function checkPin() {
+      const pin = document.getElementById('pinCode').value;
+      const errorMsg = document.getElementById('errorMsg');
+      
+      if(pin === CORRECT_PIN) {
+        document.getElementById('lockPage').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        loadCommentsFromServer();
+        
+        // تشغيل الموسيقى تلقائياً فور الدخول
+        const music = document.getElementById('bgMusic');
+        if(music) { music.play().catch(()=>{}); }
+      } else {
+        errorMsg.style.display = 'block';
+      }
+    }
 
+    // إرسال التعليق للسحابة
     async function postComment() {
       const text = document.getElementById('replyMsg').value.trim();
       if(text === "") {
@@ -226,17 +334,14 @@
       }
 
       try {
-        // 1. جلب الرسائل الحالية من السيرفر
         let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
           headers: { "X-Master-Key": API_KEY }
         });
         let data = await res.json();
         let comments = data.record || [];
 
-        // 2. إضافة الرسالة الجديدة في البداية
         comments.unshift({ text: text, time: new Date().toLocaleString('ar-EG') });
 
-        // 3. حفظ القائمة المحدثة على السيرفر
         await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
           method: 'PUT',
           headers: {
@@ -248,12 +353,13 @@
 
         document.getElementById('replyMsg').value = '';
         loadCommentsFromServer();
-        alert("تم إرسال رسالتك وسيراتها من أي جهاز بنجاح!");
+        alert("تم إرسال الرسالة بنجاح وسيراها الجميع!");
       } catch (err) {
         alert("حدث خطأ أثناء الإرسال، تأكد من الاتصال بالإنترنت!");
       }
     }
 
+    // تحميل التعليقات من السحابة
     async function loadCommentsFromServer() {
       let container = document.getElementById('commentsContainer');
       container.innerHTML = '<div style="color: #aaa; text-align: center; font-size: 0.85rem;">جاري تحميل الرسائل...</div>';
